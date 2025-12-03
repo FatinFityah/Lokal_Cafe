@@ -25,7 +25,7 @@ export const menuItems: MenuItem[] = [
     category: 'Local', 
     price: 'RM 12.00', 
     description: 'Crispy fried chicken served with fragrant rice and soup.',
-    image: '/images/2.jpg'
+    image: '/images/2.png'
   },
   { 
     id: '3', 
@@ -33,7 +33,7 @@ export const menuItems: MenuItem[] = [
     category: 'Local', 
     price: 'RM 15.00', 
     description: 'Our signature nasi lemak paired with creamy buttermilk chicken.',
-    image: '/images/3.jpg'
+    image: '/images/3.png'
   },
 
   // Western Food
@@ -43,7 +43,7 @@ export const menuItems: MenuItem[] = [
     category: 'Western', 
     price: 'RM 16.00', 
     description: 'Deep-fried marinated chicken thigh served with fries and coleslaw.',
-    image: '/images/4.jpg'
+    image: '/images/4.png'
   },
   { 
     id: '5', 
@@ -51,7 +51,7 @@ export const menuItems: MenuItem[] = [
     category: 'Western', 
     price: 'RM 18.00', 
     description: 'Creamy buttermilk sauce tossed with fettucine pasta.',
-    image: '/images/5.jpg'
+    image: '/images/5.png'
   },
   { 
     id: '6', 
@@ -60,14 +60,14 @@ export const menuItems: MenuItem[] = [
     price: 'RM 18.00', 
     description: 'Classic creamy white sauce pasta with mushrooms.',
     image: '/images/6.jpg'
-  },
+
   { 
     id: '7', 
     name: 'Spaghetti Bolognese', 
     category: 'Western', 
     price: 'RM 18.00', 
     description: 'Experience nice bolognese in town.',
-    image: '/images/20.jpg'
+    image: '/images/20.png'
   },
 
   // Drinks
@@ -80,7 +80,7 @@ export const menuItems: MenuItem[] = [
   {id:  '13', name: 'Chocolate Larva', category: 'Drinks', price: 'RM 12.00', description: 'Iced chocolate cake with ice cream.', image: '/images/17.jpg' },
 
   // Desserts
-  { id: '14', name: 'Spring Roll', category: 'Dessert', price: 'RM 6.00', description: 'Crispy vegetable spring rolls.', image: '/images/13.jpg' },
+  { id: '14', name: 'Spring Roll', category: 'Dessert', price: 'RM 6.00', description: 'Crispy vegetable spring rolls.', image: '/images/13.png' },
   { id: '15', name: 'Peanut Waffle', category: 'Dessert', price: 'RM 5.00', description: 'Classic waffle with peanut spread.', image: '/images/14.jpg' },
   { id: '16', name: 'Strawberry Waffle', category: 'Dessert', price: 'RM 6.00', description: 'Waffle with strawberry jam.', image: 'images/16.jpg' },
   { id: '17', name: 'Chocolate Waffle', category: 'Dessert', price: 'RM 6.00', description: 'Waffle with rich chocolate.', image: '/images/15.jpg' },
