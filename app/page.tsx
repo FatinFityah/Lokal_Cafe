@@ -1,86 +1,108 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { menuItems, Category } from '@/lib/menuData';
 import Link from 'next/link';
+import Image from 'next/image'; // Import the Image component
 
-export default function LoginPage() {
-  const [role, setRole] = useState<'customer' | 'admin'>('customer');
-  const router = useRouter();
+export default function Home() {
+  const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (role === 'admin') {
-      // Redirect staff to the dashboard
-      router.push('/admin/dashboard');
-    } else {
-      // Redirect customers to the menu
-      alert("Welcome! Redirecting to Menu...");
-      router.push('/');
-    }
-  };
+  const filteredItems = activeCategory === 'All' 
+    ? menuItems 
+    : menuItems.filter(item => item.category === activeCategory);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-coffee-50 p-4">
-      <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-coffee-200">
-        <div className="text-center mb-8">
-          <Link href="/" className="text-4xl font-black text-black block mb-2 tracking-tight">Lokal Cafe.</Link>
-          {/* Changed "Welcome Back" to be purely BLACK and BOLD */}
-          <h2 className="text-xl font-black text-black uppercase tracking-wide">Welcome Back</h2>
+    <main className="min-h-screen bg-coffee-50">
+      {/* Navbar */}
+      <nav className="flex justify-between items-center p-6 px-8 bg-white sticky top-0 z-50 shadow-md border-b-2 border-coffee-200">
+        <h1 className="text-3xl font-black text-black tracking-tight">Lokal Cafe.</h1>
+        <div className="space-x-8 hidden md:flex text-black font-bold text-base uppercase tracking-wide">
+          <a href="#menu" className="hover:text-coffee-500 transition-colors">Menu</a>
+          <a href="#about" className="hover:text-coffee-500 transition-colors">About</a>
+          <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
-
-        {/* Role Toggles */}
-        <div className="flex bg-coffee-100 p-1.5 rounded-xl mb-8 border-2 border-coffee-200">
-          <button
-            onClick={() => setRole('customer')}
-            className={`flex-1 py-3 text-sm font-extrabold rounded-lg transition-all ${
-              role === 'customer' 
-              ? 'bg-black text-white shadow-lg' 
-              : 'text-black hover:bg-white/50' // INACTIVE IS NOW BLACK TEXT
-            }`}
-          >
-            CUSTOMER
-          </button>
-          <button
-            onClick={() => setRole('admin')}
-            className={`flex-1 py-3 text-sm font-extrabold rounded-lg transition-all ${
-              role === 'admin' 
-              ? 'bg-black text-white shadow-lg' 
-              : 'text-black hover:bg-white/50' // INACTIVE IS NOW BLACK TEXT
-            }`}
-          >
-            ADMIN / STAFF
-          </button>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-sm font-extrabold text-black mb-2 uppercase tracking-wide">Email Address</label>
-            <input 
-              type="email" 
-              placeholder={role === 'admin' ? "staff@lokalcafe.com" : "you@example.com"} 
-              className="w-full px-5 py-3 border-2 border-black/10 rounded-xl focus:outline-none focus:border-black focus:ring-1 focus:ring-black bg-white text-black font-bold placeholder-gray-400" 
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-extrabold text-black mb-2 uppercase tracking-wide">Password</label>
-            <input 
-              type="password" 
-              placeholder="••••••••" 
-              className="w-full px-5 py-3 border-2 border-black/10 rounded-xl focus:outline-none focus:border-black focus:ring-1 focus:ring-black bg-white text-black font-bold placeholder-gray-400" 
-            />
-          </div>
-          <button type="submit" className="w-full bg-coffee-500 text-black py-4 rounded-xl font-black text-lg hover:bg-black hover:text-white transition-all shadow-lg uppercase tracking-wider border-2 border-transparent hover:border-white">
-            {role === 'admin' ? 'Access Dashboard' : 'Sign In'}
-          </button>
-        </form>
-        
-        <p className="text-center mt-8 text-sm font-bold text-gray-500">
-          <Link href="/" className="hover:text-black transition-colors underline decoration-2 underline-offset-4">
-            ← Back to Homepage
+        <div className="flex gap-4">
+          <Link href="/login" className="px-6 py-3 text-sm bg-black text-white rounded-full hover:bg-coffee-900 font-extrabold transition-all shadow-lg">
+            SIGN IN
           </Link>
-        </p>
-      </div>
-    </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="relative h-[80vh] flex items-center justify-center text-center px-4 bg-coffee-900 overflow-hidden">
+        <div className="absolute inset-0 opacity-50 bg-[url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center" />
+        
+        <div className="relative z-10 space-y-6 max-w-3xl">
+          <span className="text-white tracking-[0.2em] uppercase text-lg font-extrabold bg-black/30 px-4 py-1 rounded">Batu Pahat, Johor</span>
+          <h2 className="text-5xl md:text-8xl font-black text-white leading-tight drop-shadow-lg">
+            TASTE THE <span className="text-coffee-500">LOKAL</span> VIBE.
+          </h2>
+          <p className="text-white text-xl font-bold drop-shadow-md max-w-xl mx-auto">
+            Serving the best Nasi Lemak Kukus, Premium Frappes, and Western delights in town.
+          </p>
+          <a href="#menu" className="inline-block mt-8 px-10 py-4 bg-coffee-500 text-black rounded-full font-black text-lg hover:bg-white hover:text-black transition shadow-xl">
+            ORDER NOW
+          </a>
+        </div>
+      </section>
+
+      {/* Menu Section */}
+      <section id="menu" className="py-20 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h3 className="text-4xl font-black text-black mb-2 uppercase">Our Menu</h3>
+          <p className="text-coffee-900 font-bold text-lg">Freshly prepared for you</p>
+        </div>
+
+        {/* Categories Tabs */}
+        <div className="flex flex-wrap justify-center gap-4 mb-10">
+          {['All', 'Local', 'Western', 'Drinks', 'Dessert'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat as any)}
+              className={`px-8 py-3 rounded-full border-2 font-bold text-lg transition-all ${
+                activeCategory === cat 
+                ? 'bg-black text-white border-black' 
+                : 'bg-white border-coffee-200 text-black hover:border-coffee-500 hover:bg-coffee-50'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Menu Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredItems.map((item) => (
+            <div key={item.id} className="bg-white p-6 rounded-3xl shadow-lg border-2 border-coffee-100 hover:border-coffee-500 transition group">
+              
+              {/* IMAGE CONTAINER */}
+              <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
+                {/* When you have the photos, they will appear here.
+                   Until then, it might show a 'broken image' icon or just blank space.
+                */}
+                <Image 
+                  src={item.image} 
+                  alt={item.name}
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+
+              <div className="flex justify-between items-start mb-3">
+                <h4 className="text-2xl font-black text-black leading-tight">{item.name}</h4>
+                <span className="text-coffee-800 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
+              </div>
+              <p className="text-coffee-900 font-semibold text-base mb-6 leading-relaxed">
+                {item.description}
+              </p>
+              <button className="w-full py-3 border-2 border-black rounded-xl text-black font-extrabold text-lg hover:bg-black hover:text-white transition shadow-sm">
+                ADD TO CART
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
