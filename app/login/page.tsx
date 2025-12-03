@@ -12,11 +12,11 @@ export default function LoginPage() {
     e.preventDefault();
     // This is a simulation for now
     if (role === 'admin') {
-      alert("Welcome Staff! Accessing Dashboard...");
-      // We will build the dashboard later
+      // Staff goes to the Dashboard
+      router.push('/admin/dashboard');
     } else {
-      alert("Welcome! Redirecting to Menu...");
-      router.push('/');
+      // Customers go straight to the Menu section
+      router.push('/#menu'); // <--- Change '/' to '/#menu'
     }
   };
 
