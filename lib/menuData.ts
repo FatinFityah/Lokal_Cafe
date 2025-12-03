@@ -60,6 +60,7 @@ export const menuItems: MenuItem[] = [
     price: 'RM 18.00', 
     description: 'Classic creamy white sauce pasta with mushrooms.',
     image: '/images/6.jpg'
+  },
 
   { 
     id: '7', 
