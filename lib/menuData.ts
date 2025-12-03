@@ -73,7 +73,7 @@ export const menuItems: MenuItem[] = [
 
   // Drinks
   { id: '7', name: 'Mineral Water', category: 'Drinks', price: 'RM 2.00', description: 'Chilled mineral water.', image: '/images/7.jpg' },
-  { id: '8', name: 'Butterscotch Frappe', category: 'Drinks', price: 'RM 13.00', description: 'Ice blended butterscotch drink.', image: '/images/8.jpg' },
+  { id: '8', name: 'Butterscotch Frappe', category: 'Drinks', price: 'RM 13.00', description: 'Ice blended butterscotch drink.', image: '/images/8.png' },
   { id: '9', name: 'Banana Frappe', category: 'Drinks', price: 'RM 13.00', description: 'Sweet and creamy banana ice blend.', image: '/images/9.jpg' },
   { id: '10', name: 'Vietnam Frappe', category: 'Drinks', price: 'RM 14.00', description: 'Strong Vietnamese coffee blend frappe.', image: '/images/10.jpg' },
   { id: '11', name: 'Blue Monster Frappe', category: 'Drinks', price: 'RM 14.00', description: 'A vibrant blue vanilla citrus blend.', image: '/images/11.jpg' },
