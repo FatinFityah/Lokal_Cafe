@@ -78,7 +78,7 @@ export const menuItems: MenuItem[] = [
   { id: '10', name: 'Vietnam Frappe', category: 'Drinks', price: 'RM 14.00', description: 'Strong Vietnamese coffee blend frappe.', image: '/images/10.jpg' },
   { id: '11', name: 'Blue Monster Frappe', category: 'Drinks', price: 'RM 14.00', description: 'A vibrant blue vanilla citrus blend.', image: '/images/11.jpg' },
   { id: '12', name: 'Strawberry Frappe', category: 'Drinks', price: 'RM 13.00', description: 'Fresh strawberry ice blended drink.', image: '/images/12.jpg' },
-  {id:  '13', name: 'Chocolate Larva', category: 'Drinks', price: 'RM 12.00', description: 'Iced chocolate cake with ice cream.', image: '/images/17.jpg' },
+  {id:  '13', name: 'Chocolate Larva', category: 'Drinks', price: 'RM 12.00', description: 'Iced chocolate cake with ice cream.', image: '/images/17.png' },
 
   // Desserts
   { id: '14', name: 'Spring Roll', category: 'Dessert', price: 'RM 6.00', description: 'Crispy vegetable spring rolls.', image: '/images/13.png' },
