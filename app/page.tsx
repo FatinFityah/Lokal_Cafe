@@ -1,12 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // Added useEffect
 import { menuItems, Category } from '@/lib/menuData';
 import Link from 'next/link';
-import Image from 'next/image'; // Import the Image component
+import Image from 'next/image';
+import { FaUserCircle } from 'react-icons/fa'; // Make sure you installed react-icons
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
+  
+  // New State: Is the user logged in?
+  const [user, setUser] = useState<string | null>(null);
+
+  // Check browser memory when page loads
+  useEffect(() => {
+    // We check if "lokalUser" exists in the browser's storage
+    const savedUser = localStorage.getItem('lokalUser');
+    if (savedUser) {
+      setUser(savedUser);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('lokalUser'); // Delete memory
+    setUser(null); // Update screen
+    // Optional: Refresh page to clear any data
+    window.location.reload();
+  };
 
   const filteredItems = activeCategory === 'All' 
     ? menuItems 
@@ -22,10 +42,29 @@ export default function Home() {
           <a href="#about" className="hover:text-coffee-500 transition-colors">About</a>
           <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
-        <div className="flex gap-4">
-          <Link href="/login" className="px-6 py-3 text-sm bg-black text-white rounded-full hover:bg-coffee-900 font-extrabold transition-all shadow-lg">
-            SIGN IN
-          </Link>
+        
+        {/* Navbar Right Side - Logic for Login vs User Profile */}
+        <div className="flex gap-4 items-center">
+          {user ? (
+            // IF LOGGED IN: Show User Name + Logout
+            <div className="flex items-center gap-3">
+              <span className="hidden md:block font-bold text-black text-sm">
+                Hi, {user}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-full hover:bg-red-100 hover:text-red-600 font-bold transition-all"
+              >
+                <FaUserCircle className="text-xl" />
+                <span className="text-xs uppercase">Logout</span>
+              </button>
+            </div>
+          ) : (
+            // IF NOT LOGGED IN: Show Sign In Button
+            <Link href="/login" className="px-6 py-3 text-sm bg-black text-white rounded-full hover:bg-coffee-900 font-extrabold transition-all shadow-lg">
+              SIGN IN
+            </Link>
+          )}
         </div>
       </nav>
 
@@ -78,9 +117,6 @@ export default function Home() {
               
               {/* IMAGE CONTAINER */}
               <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
-                {/* When you have the photos, they will appear here.
-                   Until then, it might show a 'broken image' icon or just blank space.
-                */}
                 <Image 
                   src={item.image} 
                   alt={item.name}
