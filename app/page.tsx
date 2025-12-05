@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { menuItems, Category, MenuItem } from '@/lib/menuData'; // Added MenuItem type
+import { menuItems, Category, MenuItem } from '@/lib/menuData';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart } from 'react-icons/fa'; // Added Icons
+import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa'; // Added Instagram & Map Icons
 import { useAuth } from './context/AuthContext';
 
 export default function Home() {
@@ -71,7 +71,7 @@ export default function Home() {
       <section id="menu" className="py-20 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h3 className="text-4xl font-black text-black mb-2 uppercase">Our Menu</h3>
-          <p className="text-coffee-900 font-bold text-lg">Freshly prepared for you</p>
+          <p className="text-black font-bold text-lg">Freshly prepared for you</p>
         </div>
 
         {/* Categories Tabs */}
@@ -91,30 +91,82 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Menu Grid - NOW USES THE 'MenuCard' COMPONENT */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item) => (
-            // We use the special component below to handle the +/- logic
             <MenuCard key={item.id} item={item} />
           ))}
         </div>
       </section>
+
+      {/* About Section */}
+      <section id="about" className="py-20 bg-white border-t-2 border-coffee-100">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h3 className="text-4xl font-black text-black mb-8 uppercase">About Us</h3>
+          <div className="space-y-6 text-lg font-medium text-gray-800 leading-relaxed">
+            <p>
+              Welcome to <span className="text-coffee-500 font-bold">Lokal Cafe</span>, the heartbeat of Batu Pahat's food scene.
+            </p>
+            <p>
+              We started with a simple mission: to elevate local favorites like <span className="font-bold">Nasi Lemak Kukus</span> with a premium touch, while serving up Western classics that hit the spot. Whether you are craving our signature buttermilk sauce or a refreshing Blue Monster Frappe, everything is crafted with passion.
+            </p>
+            <p>
+              More than just food, Lokal Cafe is a place to gather, relax, and enjoy the vibe. Come for the Nasi Ayam Crunchy, stay for the memories.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Location / Contact Section */}
+      <section id="location" className="py-20 bg-coffee-900 text-white">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h3 className="text-4xl font-black mb-8 uppercase">Find Us</h3>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Address */}
+            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20">
+              <FaMapMarkerAlt className="text-5xl text-coffee-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold mb-2">Lokal Cafe HQ</h4>
+              <p className="text-gray-300 font-medium">
+                Batu Pahat, Johor.<br/>
+                (Near UTHM Parit Raja)
+              </p>
+            </div>
+
+            {/* Social Media */}
+            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20">
+              <FaInstagram className="text-5xl text-pink-500 mx-auto mb-4" />
+              <h4 className="text-2xl font-bold mb-4">Follow Our Updates</h4>
+              <a 
+                href="https://www.instagram.com/l.o.k.a.l_?igsh=MWFzdXN5czJoZXdlNA==" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-3 bg-white text-black font-black rounded-full hover:bg-coffee-500 hover:text-white transition shadow-lg"
+              >
+                @l.o.k.a.l_
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Footer */}
+      <footer className="bg-black text-gray-500 py-8 text-center text-sm font-bold">
+        <p>© 2025 Lokal Cafe. All rights reserved.</p>
+      </footer>
     </main>
   );
 }
 
 // ------------------------------------------------------------------
-// NEW COMPONENT: HANDLES THE PLUS / MINUS BUTTONS FOR EACH CARD
+// MENU CARD COMPONENT (With Fixed Colors)
 // ------------------------------------------------------------------
 function MenuCard({ item }: { item: MenuItem }) {
-  // Each card remembers its own quantity (starts at 1)
   const [quantity, setQuantity] = useState(1);
 
   const increase = () => setQuantity(prev => prev + 1);
   const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
-    // For now, we just alert the user. Later we can make a real cart!
     alert(`Added ${quantity} x ${item.name} to your cart!`);
   };
 
@@ -131,19 +183,21 @@ function MenuCard({ item }: { item: MenuItem }) {
         />
       </div>
 
-      {/* Info */}
+      {/* Info - UPDATED COLORS HERE */}
       <div className="flex justify-between items-start mb-3">
-        <h4 className="text-2xl font-black text-black leading-tight">{item.name}</h4>
-        <span className="text-coffee-800 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
+        {/* Name: Text-3xl (Big) and Text-Black (Dark) */}
+        <h4 className="text-3xl font-black text-black leading-tight tracking-tight">{item.name}</h4>
+        <span className="text-coffee-600 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
       </div>
-      <p className="text-coffee-900 font-semibold text-base mb-6 leading-relaxed flex-grow">
+      
+      {/* Description: Darker Gray */}
+      <p className="text-gray-800 font-bold text-sm mb-6 leading-relaxed flex-grow">
         {item.description}
       </p>
 
-      {/* CONTROLS SECTION */}
+      {/* Controls */}
       <div className="mt-auto">
-        {/* Plus / Minus Buttons */}
-        <div className="flex items-center justify-between bg-gray-50 rounded-xl p-2 mb-4 border border-gray-200">
+        <div className="flex items-center justify-between bg-gray-100 rounded-xl p-2 mb-4 border border-gray-300">
           <button 
             onClick={decrease}
             className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-black hover:bg-red-100 hover:text-red-600 transition"
@@ -163,10 +217,9 @@ function MenuCard({ item }: { item: MenuItem }) {
           </button>
         </div>
 
-        {/* Add Button */}
         <button 
           onClick={handleAddToCart}
-          className="w-full py-3 bg-coffee-500 text-black border-2 border-transparent rounded-xl font-extrabold text-lg hover:bg-black hover:text-white transition shadow-lg active:scale-95 flex items-center justify-center gap-3"
+          className="w-full py-4 bg-coffee-500 text-black border-2 border-transparent rounded-xl font-extrabold text-lg hover:bg-black hover:text-white transition shadow-lg active:scale-95 flex items-center justify-center gap-3"
         >
           <FaShoppingCart />
           ADD TO CART
