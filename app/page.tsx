@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { menuItems, Category, MenuItem } from '@/lib/menuData';
+import { menuItems, Category, MenuItem } from '@/lib/menuData'; // Corrected MenuItem import path
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from './context/AuthContext';
+import { useCart } from './context/CartContext'; // Ensure this is imported correctly
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   const { user, logout } = useAuth();
+  const { totalItems, addItem } = useCart(); // Use Cart
 
   const filteredItems = activeCategory === 'All' 
     ? menuItems 
@@ -17,7 +19,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-coffee-50">
-      {/* Navbar */}
+      {/* Navbar (Kept the same) */}
       <nav className="flex justify-between items-center p-6 px-8 bg-white sticky top-0 z-50 shadow-md border-b-2 border-coffee-200">
         <h1 className="text-3xl font-black text-black tracking-tight">Lokal Cafe.</h1>
         <div className="space-x-8 hidden md:flex text-black font-bold text-base uppercase tracking-wide">
@@ -26,19 +28,23 @@ export default function Home() {
           <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
         
-        {/* Navbar Right Side */}
+        {/* Navbar Right Side - CART ICON */}
         <div className="flex gap-4 items-center">
+          
+          <div className="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition cursor-pointer">
+            <FaShoppingCart className="text-xl text-black" />
+            {totalItems > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold">
+                {totalItems}
+              </span>
+            )}
+          </div>
+          
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="hidden md:block font-bold text-black text-sm">
-                Hi, {user.name}
-              </span>
-              <button 
-                onClick={logout}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-full hover:bg-red-100 hover:text-red-600 font-bold transition-all"
-              >
-                <FaUserCircle className="text-xl" />
-                <span className="text-xs uppercase">Logout</span>
+              <span className="hidden md:block font-black text-black text-sm">Hi, {user.name}</span>
+              <button onClick={logout} className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-full hover:bg-red-100 hover:text-red-600 font-bold transition-all">
+                <FaUserCircle className="text-xl" /><span className="text-xs uppercase">Logout</span>
               </button>
             </div>
           ) : (
@@ -49,7 +55,7 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section - UPDATED: Made overlay darker (opacity-70) so text is clearer */}
+      {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center text-center px-4 bg-black overflow-hidden">
         <div className="absolute inset-0 opacity-70 bg-[url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center" />
         
@@ -68,10 +74,10 @@ export default function Home() {
       </section>
 
       {/* Menu Section */}
-      <section id="menu" className="py-20 px-4 max-w-7xl mx-auto">
+      <section id="menu" className="py-20 px-4 bg-black text-white"> 
         <div className="text-center mb-12">
-          <h3 className="text-5xl font-black text-black mb-4 uppercase">Our Menu</h3>
-          <p className="text-black font-extrabold text-xl">Freshly prepared for you</p>
+          <h3 className="text-5xl font-black text-white mb-4 uppercase">OUR MENU</h3>
+          <p className="text-coffee-500 font-extrabold text-xl">Freshly prepared for you</p>
         </div>
 
         {/* Categories Tabs */}
@@ -82,8 +88,8 @@ export default function Home() {
               onClick={() => setActiveCategory(cat as any)}
               className={`px-8 py-3 rounded-full border-2 font-black text-lg transition-all ${
                 activeCategory === cat 
-                ? 'bg-black text-white border-black shadow-lg' 
-                : 'bg-white border-black text-black hover:bg-black hover:text-white'
+                ? 'bg-coffee-500 text-black border-coffee-500 shadow-lg'
+                : 'bg-white border-black text-black hover:bg-gray-700 hover:text-white'
               }`}
             >
               {cat}
@@ -91,54 +97,38 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {filteredItems.map((item) => (
-            <MenuCard key={item.id} item={item} />
+            // Pass the addItem function to the card
+            <MenuCard key={item.id} item={item} addItem={addItem} totalItems={totalItems} /> 
           ))}
         </div>
       </section>
 
-      {/* About Section */}
+      {/* About/Location/Footer (Kept the same) */}
       <section id="about" className="py-20 bg-white border-t-4 border-black">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-black text-black mb-8 uppercase">About Us</h3>
           <div className="space-y-6 text-xl font-bold text-black leading-relaxed">
-            <p>
-              Welcome to <span className="text-coffee-500 font-black">Lokal Cafe</span>, the heartbeat of Batu Pahat's food scene.
-            </p>
-            <p>
-              We started with a simple mission: to elevate local favorites like <span className="underline decoration-coffee-500 decoration-4">Nasi Lemak Kukus</span> with a premium touch.
-            </p>
+            <p>Welcome to <span className="text-coffee-500 font-black">Lokal Cafe</span>, the heartbeat of Batu Pahat's food scene.</p>
+            <p>We started with a simple mission: to elevate local favorites like <span className="underline decoration-coffee-500 decoration-4">Nasi Lemak Kukus</span> with a premium touch.</p>
           </div>
         </div>
       </section>
 
-      {/* Location / Contact Section */}
       <section id="location" className="py-20 bg-black text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-black mb-8 uppercase">Find Us</h3>
-          
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Address */}
             <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border-2 border-white/20">
               <FaMapMarkerAlt className="text-5xl text-coffee-500 mx-auto mb-4" />
               <h4 className="text-2xl font-black mb-2">Lokal Cafe HQ</h4>
-              <p className="text-white font-bold text-lg">
-                Batu Pahat, Johor.<br/>
-                (Near UTHM Parit Raja)
-              </p>
+              <p className="text-white font-bold text-lg">Batu Pahat, Johor.<br/>(Near UTHM Parit Raja)</p>
             </div>
-
-            {/* Social Media */}
             <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border-2 border-white/20">
               <FaInstagram className="text-5xl text-pink-500 mx-auto mb-4" />
               <h4 className="text-2xl font-black mb-4">Follow Our Updates</h4>
-              <a 
-                href="https://www.instagram.com/l.o.k.a.l_?igsh=MWFzdXN5czJoZXdlNA==" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-block px-8 py-3 bg-white text-black font-black rounded-full hover:bg-coffee-500 hover:text-white transition shadow-lg"
-              >
+              <a href="https://www.instagram.com/l.o.k.a.l_?igsh=MWFzdXN5czJoZXdlNA==" target="_blank" rel="noopener noreferrer" className="inline-block px-8 py-3 bg-white text-black font-black rounded-full hover:bg-coffee-500 hover:text-white transition shadow-lg">
                 @l.o.k.a.l_
               </a>
             </div>
@@ -146,7 +136,6 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Footer */}
       <footer className="bg-white text-black py-8 text-center text-sm font-black border-t-2 border-black">
         <p>© 2025 Lokal Cafe. All rights reserved.</p>
       </footer>
@@ -155,16 +144,24 @@ export default function Home() {
 }
 
 // ------------------------------------------------------------------
-// MENU CARD COMPONENT (FIXED: PRICE IS NOW BLACK & BIGGER)
+// MENU CARD COMPONENT (Updated totalItems prop)
 // ------------------------------------------------------------------
-function MenuCard({ item }: { item: MenuItem }) {
+interface MenuCardProps {
+    item: MenuItem;
+    addItem: (item: MenuItem, quantity: number) => void;
+    totalItems: number; // Include totalItems
+}
+
+function MenuCard({ item, addItem, totalItems }: MenuCardProps) {
   const [quantity, setQuantity] = useState(1);
 
   const increase = () => setQuantity(prev => prev + 1);
   const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
-    alert(`Added ${quantity} x ${item.name} to your cart!`);
+    addItem(item, quantity);
+    alert(`Added ${quantity} x ${item.name} to cart! Total items: ${totalItems + quantity}`);
+    setQuantity(1); // Reset counter after adding
   };
 
   return (
@@ -180,16 +177,13 @@ function MenuCard({ item }: { item: MenuItem }) {
         />
       </div>
 
-      {/* Info - UPDATED COLORS HERE */}
+      {/* Info - High Contrast Text */}
       <div className="flex justify-between items-start mb-3">
-        {/* Name: Text-3xl (Big) and Text-Black (Dark) */}
         <h4 className="text-2xl font-black text-black leading-tight tracking-tight">{item.name}</h4>
-        
-        {/* PRICE FIX: Made it BIGGER (text-2xl) and SOLID BLACK */}
         <span className="text-black font-black text-2xl whitespace-nowrap ml-2">{item.price}</span>
       </div>
       
-      {/* Description: Changed from Gray to Black for clarity */}
+      {/* Description */}
       <p className="text-black font-bold text-sm mb-6 leading-relaxed flex-grow opacity-80">
         {item.description}
       </p>
@@ -227,3 +221,4 @@ function MenuCard({ item }: { item: MenuItem }) {
     </div>
   );
 }
+
