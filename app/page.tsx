@@ -1,14 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { menuItems, Category, MenuItem } from '@/lib/menuData'; // Corrected MenuItem import path
+import { menuItems, Category, MenuItem } from '@/lib/menuData';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from './context/AuthContext';
-import { useCart } from './context/CartContext'; // Ensure this is imported correctly
+import { useCart } from './context/CartContext';
 
-export default function Home() {
+// ------------------------------------------------------------------
+// CLIENT COMPONENT WRAPPER (This holds all the interactive logic)
+// ------------------------------------------------------------------
+function HomePageContent() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   const { user, logout } = useAuth();
   const { totalItems, addItem } = useCart(); // Use Cart
@@ -19,7 +22,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-coffee-50">
-      {/* Navbar (Kept the same) */}
+      {/* Navbar */}
       <nav className="flex justify-between items-center p-6 px-8 bg-white sticky top-0 z-50 shadow-md border-b-2 border-coffee-200">
         <h1 className="text-3xl font-black text-black tracking-tight">Lokal Cafe.</h1>
         <div className="space-x-8 hidden md:flex text-black font-bold text-base uppercase tracking-wide">
@@ -28,10 +31,10 @@ export default function Home() {
           <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
         
-        {/* Navbar Right Side - CART ICON */}
+        {/* Navbar Right Side - CART ICON + AUTH */}
         <div className="flex gap-4 items-center">
           
-         {/* Cart Icon - NOW LINKS TO THE CART PAGE */}
+          {/* Cart Icon - NOW LINKS TO /cart PAGE */}
           <Link href="/cart" className="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition cursor-pointer">
             <FaShoppingCart className="text-xl text-black" />
             {totalItems > 0 && (
@@ -100,7 +103,6 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {filteredItems.map((item) => (
-            // Pass the addItem function to the card
             <MenuCard key={item.id} item={item} addItem={addItem} totalItems={totalItems} /> 
           ))}
         </div>
@@ -145,12 +147,19 @@ export default function Home() {
 }
 
 // ------------------------------------------------------------------
-// MENU CARD COMPONENT (Updated totalItems prop)
+// Base component that exports the page
+// ------------------------------------------------------------------
+export default function HomeBase() {
+    return <HomePageContent />;
+}
+
+// ------------------------------------------------------------------
+// MENU CARD COMPONENT (Kept the same high-contrast styling)
 // ------------------------------------------------------------------
 interface MenuCardProps {
     item: MenuItem;
     addItem: (item: MenuItem, quantity: number) => void;
-    totalItems: number; // Include totalItems
+    totalItems: number; 
 }
 
 function MenuCard({ item, addItem, totalItems }: MenuCardProps) {
