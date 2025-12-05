@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaGoogle, FaFacebookF, FaEnvelope } from 'react-icons/fa';
-// IMPORT THE NEW HOOK (Notice the ../ because we are inside a folder)
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
@@ -12,7 +11,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState(''); // Track email input
   const router = useRouter();
   
-  // USE THE NEW "BRAIN"
   const { login } = useAuth();
 
   const handleLogin = (e: React.FormEvent) => {
@@ -20,8 +18,7 @@ export default function LoginPage() {
     if (role === 'admin') {
       router.push('/admin/dashboard');
     } else {
-      // 1. Log in using the Context (This updates the Navbar instantly!)
-      // We use the email as the name for now, or "Valued Customer"
+      // Logic for Email/Password Login
       const name = email.split('@')[0] || "Customer";
       login(name, email, 'customer');
       
@@ -31,8 +28,16 @@ export default function LoginPage() {
   };
 
   const handleSocialLogin = (provider: string) => {
-    // Simulate social login using Context
-    login("Fatin Fityah", "fatin@example.com", 'customer');
+    // FIX: Requires email input to pull the name
+    if (!email || !email.includes('@')) {
+        alert("Please enter a valid email address first to continue with social login!");
+        return;
+    }
+    
+    const name = email.split('@')[0];
+    // Use the name from the email input
+    login(name, email, 'customer'); 
+    
     alert(`Logged in with ${provider}!`);
     router.push('/');
   };
@@ -42,11 +47,10 @@ export default function LoginPage() {
       <div className="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-md border-2 border-coffee-200">
         <div className="text-center mb-6">
           <Link href="/" className="text-4xl font-black text-black block mb-2 tracking-tight">Lokal Cafe.</Link>
-          {/* FIXED COLOR: Made "Welcome Back" solid BLACK */}
           <h2 className="text-xl font-black text-black uppercase tracking-wide">Welcome Back</h2>
         </div>
 
-        {/* Role Toggles */}
+        {/* Role Toggles (Customer vs Admin) */}
         <div className="flex bg-coffee-100 p-1.5 rounded-xl mb-6 border-2 border-coffee-200">
           <button
             onClick={() => setRole('customer')}
@@ -66,7 +70,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Social Buttons */}
+        {/* Social Login Buttons (Only show for Customers) */}
         {role === 'customer' && (
           <div className="space-y-3 mb-6">
             <button 
@@ -100,7 +104,7 @@ export default function LoginPage() {
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com" 
+                placeholder={role === 'admin' ? "staff@lokalcafe.com" : "you@example.com"} 
                 className="w-full pl-10 pr-4 py-3 border-2 border-black/10 rounded-xl focus:outline-none focus:border-black font-bold placeholder-gray-400 text-black" 
               />
             </div>
