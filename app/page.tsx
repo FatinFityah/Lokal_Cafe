@@ -1,32 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react'; // Added useEffect
+import { useState } from 'react';
 import { menuItems, Category } from '@/lib/menuData';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUserCircle } from 'react-icons/fa'; // Make sure you installed react-icons
+import { FaUserCircle } from 'react-icons/fa';
+// IMPORT THE NEW HOOK
+import { useAuth } from './context/AuthContext';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   
-  // New State: Is the user logged in?
-  const [user, setUser] = useState<string | null>(null);
-
-  // Check browser memory when page loads
-  useEffect(() => {
-    // We check if "lokalUser" exists in the browser's storage
-    const savedUser = localStorage.getItem('lokalUser');
-    if (savedUser) {
-      setUser(savedUser);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('lokalUser'); // Delete memory
-    setUser(null); // Update screen
-    // Optional: Refresh page to clear any data
-    window.location.reload();
-  };
+  // USE THE NEW "BRAIN" (Context)
+  const { user, logout } = useAuth();
 
   const filteredItems = activeCategory === 'All' 
     ? menuItems 
@@ -43,16 +29,16 @@ export default function Home() {
           <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
         
-        {/* Navbar Right Side - Logic for Login vs User Profile */}
+        {/* Navbar Right Side - CONNECTED TO CONTEXT */}
         <div className="flex gap-4 items-center">
           {user ? (
             // IF LOGGED IN: Show User Name + Logout
             <div className="flex items-center gap-3">
               <span className="hidden md:block font-bold text-black text-sm">
-                Hi, {user}
+                Hi, {user.name}
               </span>
               <button 
-                onClick={handleLogout}
+                onClick={logout}
                 className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-full hover:bg-red-100 hover:text-red-600 font-bold transition-all"
               >
                 <FaUserCircle className="text-xl" />
@@ -110,12 +96,10 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Menu Grid */}
+        {/* Menu Grid - ADD TO CART IS HERE (Visual only for now) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item) => (
             <div key={item.id} className="bg-white p-6 rounded-3xl shadow-lg border-2 border-coffee-100 hover:border-coffee-500 transition group">
-              
-              {/* IMAGE CONTAINER */}
               <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
                 <Image 
                   src={item.image} 
@@ -124,7 +108,6 @@ export default function Home() {
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
               </div>
-
               <div className="flex justify-between items-start mb-3">
                 <h4 className="text-2xl font-black text-black leading-tight">{item.name}</h4>
                 <span className="text-coffee-800 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
@@ -132,7 +115,12 @@ export default function Home() {
               <p className="text-coffee-900 font-semibold text-base mb-6 leading-relaxed">
                 {item.description}
               </p>
-              <button className="w-full py-3 border-2 border-black rounded-xl text-black font-extrabold text-lg hover:bg-black hover:text-white transition shadow-sm">
+              
+              {/* NOTE: We will make this button work in the NEXT step */}
+              <button 
+                onClick={() => alert(`Added ${item.name} to cart!`)}
+                className="w-full py-3 border-2 border-black rounded-xl text-black font-extrabold text-lg hover:bg-black hover:text-white transition shadow-sm active:scale-95"
+              >
                 ADD TO CART
               </button>
             </div>
