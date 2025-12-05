@@ -9,12 +9,12 @@ import { useAuth } from './context/AuthContext';
 import { useCart } from './context/CartContext';
 
 // ------------------------------------------------------------------
-// CLIENT COMPONENT WRAPPER (This holds all the interactive logic)
+// Base component that exports the page
 // ------------------------------------------------------------------
-function HomePageContent() {
+export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   const { user, logout } = useAuth();
-  const { totalItems, addItem } = useCart(); // Use Cart
+  const { totalItems, addItem } = useCart();
 
   const filteredItems = activeCategory === 'All' 
     ? menuItems 
@@ -22,7 +22,7 @@ function HomePageContent() {
 
   return (
     <main className="min-h-screen bg-coffee-50">
-      {/* Navbar */}
+      {/* Navbar (Kept the same) */}
       <nav className="flex justify-between items-center p-6 px-8 bg-white sticky top-0 z-50 shadow-md border-b-2 border-coffee-200">
         <h1 className="text-3xl font-black text-black tracking-tight">Lokal Cafe.</h1>
         <div className="space-x-8 hidden md:flex text-black font-bold text-base uppercase tracking-wide">
@@ -38,7 +38,7 @@ function HomePageContent() {
           <Link href="/cart" className="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition cursor-pointer">
             <FaShoppingCart className="text-xl text-black" />
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold">
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-black">
                 {totalItems}
               </span>
             )}
@@ -71,7 +71,7 @@ function HomePageContent() {
           <p className="text-white text-2xl font-bold drop-shadow-md max-w-xl mx-auto">
             Serving the best Nasi Lemak Kukus, Premium Frappes, and Western delights in town.
           </p>
-          <a href="#menu" className="inline-block mt-8 px-10 py-4 bg-coffee-500 text-black rounded-full font-black text-lg hover:bg-white hover:text-black transition shadow-xl border-2 border-transparent hover:border-black">
+          <a href="#menu" className="inline-block mt-8 px-10 py-4 bg-coffee-500 text-white rounded-full font-black text-lg hover:bg-white hover:text-black transition shadow-xl border-2 border-transparent hover:border-black">
             ORDER NOW
           </a>
         </div>
@@ -101,9 +101,13 @@ function HomePageContent() {
           ))}
         </div>
 
+        {/* Menu Grid - Inline Component Logic */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {filteredItems.map((item) => (
-            <MenuCard key={item.id} item={item} addItem={addItem} totalItems={totalItems} /> 
+            <div key={item.id} className="bg-white p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-gray-200 hover:border-black transition group flex flex-col h-full">
+              {/* Card Logic Here */}
+              <MenuCardInline item={item} addItem={addItem} totalItems={totalItems} />
+            </div>
           ))}
         </div>
       </section>
@@ -147,22 +151,15 @@ function HomePageContent() {
 }
 
 // ------------------------------------------------------------------
-// Base component that exports the page
+// INLINE MENU CARD COMPONENT (FIXED FOR BUILD)
 // ------------------------------------------------------------------
-export default function HomeBase() {
-    return <HomePageContent />;
-}
-
-// ------------------------------------------------------------------
-// MENU CARD COMPONENT (Kept the same high-contrast styling)
-// ------------------------------------------------------------------
-interface MenuCardProps {
+interface MenuCardInlineProps {
     item: MenuItem;
     addItem: (item: MenuItem, quantity: number) => void;
     totalItems: number; 
 }
 
-function MenuCard({ item, addItem, totalItems }: MenuCardProps) {
+function MenuCardInline({ item, addItem, totalItems }: MenuCardInlineProps) {
   const [quantity, setQuantity] = useState(1);
 
   const increase = () => setQuantity(prev => prev + 1);
@@ -175,8 +172,7 @@ function MenuCard({ item, addItem, totalItems }: MenuCardProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-gray-200 hover:border-black transition group flex flex-col h-full">
-      
+    <>
       {/* Image */}
       <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border-2 border-gray-100">
         <Image 
@@ -228,7 +224,7 @@ function MenuCard({ item, addItem, totalItems }: MenuCardProps) {
           ADD TO CART
         </button>
       </div>
-    </div>
+    </>
   );
 }
 
