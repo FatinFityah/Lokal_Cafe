@@ -1,17 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { menuItems, Category } from '@/lib/menuData';
+import { useState, useEffect } from 'react';
+import { menuItems, Category, MenuItem } from '@/lib/menuData'; // Added MenuItem type
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUserCircle } from 'react-icons/fa';
-// IMPORT THE NEW HOOK
+import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart } from 'react-icons/fa'; // Added Icons
 import { useAuth } from './context/AuthContext';
 
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
-  
-  // USE THE NEW "BRAIN" (Context)
   const { user, logout } = useAuth();
 
   const filteredItems = activeCategory === 'All' 
@@ -29,10 +26,9 @@ export default function Home() {
           <a href="#location" className="hover:text-coffee-500 transition-colors">Location</a>
         </div>
         
-        {/* Navbar Right Side - CONNECTED TO CONTEXT */}
+        {/* Navbar Right Side */}
         <div className="flex gap-4 items-center">
           {user ? (
-            // IF LOGGED IN: Show User Name + Logout
             <div className="flex items-center gap-3">
               <span className="hidden md:block font-bold text-black text-sm">
                 Hi, {user.name}
@@ -46,7 +42,6 @@ export default function Home() {
               </button>
             </div>
           ) : (
-            // IF NOT LOGGED IN: Show Sign In Button
             <Link href="/login" className="px-6 py-3 text-sm bg-black text-white rounded-full hover:bg-coffee-900 font-extrabold transition-all shadow-lg">
               SIGN IN
             </Link>
@@ -96,37 +91,87 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Menu Grid - ADD TO CART IS HERE (Visual only for now) */}
+        {/* Menu Grid - NOW USES THE 'MenuCard' COMPONENT */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item) => (
-            <div key={item.id} className="bg-white p-6 rounded-3xl shadow-lg border-2 border-coffee-100 hover:border-coffee-500 transition group">
-              <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
-                <Image 
-                  src={item.image} 
-                  alt={item.name}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="flex justify-between items-start mb-3">
-                <h4 className="text-2xl font-black text-black leading-tight">{item.name}</h4>
-                <span className="text-coffee-800 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
-              </div>
-              <p className="text-coffee-900 font-semibold text-base mb-6 leading-relaxed">
-                {item.description}
-              </p>
-              
-              {/* NOTE: We will make this button work in the NEXT step */}
-              <button 
-                onClick={() => alert(`Added ${item.name} to cart!`)}
-                className="w-full py-3 border-2 border-black rounded-xl text-black font-extrabold text-lg hover:bg-black hover:text-white transition shadow-sm active:scale-95"
-              >
-                ADD TO CART
-              </button>
-            </div>
+            // We use the special component below to handle the +/- logic
+            <MenuCard key={item.id} item={item} />
           ))}
         </div>
       </section>
     </main>
+  );
+}
+
+// ------------------------------------------------------------------
+// NEW COMPONENT: HANDLES THE PLUS / MINUS BUTTONS FOR EACH CARD
+// ------------------------------------------------------------------
+function MenuCard({ item }: { item: MenuItem }) {
+  // Each card remembers its own quantity (starts at 1)
+  const [quantity, setQuantity] = useState(1);
+
+  const increase = () => setQuantity(prev => prev + 1);
+  const decrease = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+  const handleAddToCart = () => {
+    // For now, we just alert the user. Later we can make a real cart!
+    alert(`Added ${quantity} x ${item.name} to your cart!`);
+  };
+
+  return (
+    <div className="bg-white p-6 rounded-3xl shadow-lg border-2 border-coffee-100 hover:border-coffee-500 transition group flex flex-col h-full">
+      
+      {/* Image */}
+      <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
+        <Image 
+          src={item.image} 
+          alt={item.name}
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+      </div>
+
+      {/* Info */}
+      <div className="flex justify-between items-start mb-3">
+        <h4 className="text-2xl font-black text-black leading-tight">{item.name}</h4>
+        <span className="text-coffee-800 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
+      </div>
+      <p className="text-coffee-900 font-semibold text-base mb-6 leading-relaxed flex-grow">
+        {item.description}
+      </p>
+
+      {/* CONTROLS SECTION */}
+      <div className="mt-auto">
+        {/* Plus / Minus Buttons */}
+        <div className="flex items-center justify-between bg-gray-50 rounded-xl p-2 mb-4 border border-gray-200">
+          <button 
+            onClick={decrease}
+            className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-black hover:bg-red-100 hover:text-red-600 transition"
+          >
+            <FaMinus />
+          </button>
+          
+          <span className="text-xl font-black text-black w-12 text-center">
+            {quantity}
+          </span>
+
+          <button 
+            onClick={increase}
+            className="w-10 h-10 flex items-center justify-center bg-black rounded-lg shadow-sm text-white hover:bg-coffee-500 transition"
+          >
+            <FaPlus />
+          </button>
+        </div>
+
+        {/* Add Button */}
+        <button 
+          onClick={handleAddToCart}
+          className="w-full py-3 bg-coffee-500 text-black border-2 border-transparent rounded-xl font-extrabold text-lg hover:bg-black hover:text-white transition shadow-lg active:scale-95 flex items-center justify-center gap-3"
+        >
+          <FaShoppingCart />
+          ADD TO CART
+        </button>
+      </div>
+    </div>
   );
 }
