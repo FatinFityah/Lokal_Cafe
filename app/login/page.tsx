@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { FaGoogle, FaFacebookF, FaEnvelope } from 'react-icons/fa';
+// We only keep the Envelope icon now
+import { FaEnvelope } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const [role, setRole] = useState<'customer' | 'admin'>('customer');
-  const [email, setEmail] = useState(''); // Track email input
+  const [email, setEmail] = useState(''); 
   const router = useRouter();
   
   const { login } = useAuth();
@@ -18,29 +19,16 @@ export default function LoginPage() {
     if (role === 'admin') {
       router.push('/admin/dashboard');
     } else {
-      // Logic for Email/Password Login
-      const name = email.split('@')[0] || "Customer";
+      // Logic for Customer Email/Password Login
+      // Uses the name from the email input
+      const name = email.split('@')[0] || "Valued Customer";
       login(name, email, 'customer');
       
-      alert("Login Successful! Redirecting...");
+      alert(`Welcome, ${name}! Redirecting to Menu...`);
       router.push('/#menu'); 
     }
   };
-
-  const handleSocialLogin = (provider: string) => {
-    // FIX: Requires email input to pull the name
-    if (!email || !email.includes('@')) {
-        alert("Please enter a valid email address first to continue with social login!");
-        return;
-    }
-    
-    const name = email.split('@')[0];
-    // Use the name from the email input
-    login(name, email, 'customer'); 
-    
-    alert(`Logged in with ${provider}!`);
-    router.push('/');
-  };
+  // NOTE: The Social Login function is now fully removed.
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-coffee-50 p-4">
@@ -51,7 +39,7 @@ export default function LoginPage() {
         </div>
 
         {/* Role Toggles (Customer vs Admin) */}
-        <div className="flex bg-coffee-100 p-1.5 rounded-xl mb-6 border-2 border-coffee-200">
+        <div className="flex bg-coffee-100 p-1.5 rounded-xl mb-8 border-2 border-coffee-200">
           <button
             onClick={() => setRole('customer')}
             className={`flex-1 py-3 text-sm font-extrabold rounded-lg transition-all ${
@@ -70,31 +58,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        {/* Social Login Buttons (Only show for Customers) */}
-        {role === 'customer' && (
-          <div className="space-y-3 mb-6">
-            <button 
-              onClick={() => handleSocialLogin('Google')}
-              className="w-full flex items-center justify-center gap-3 py-3 border-2 border-gray-200 rounded-xl font-bold text-gray-800 hover:bg-gray-50 transition"
-            >
-              <FaGoogle className="text-red-500" /> Continue with Google
-            </button>
-            <button 
-              onClick={() => handleSocialLogin('Facebook')}
-              className="w-full flex items-center justify-center gap-3 py-3 border-2 border-gray-200 rounded-xl font-bold text-gray-800 hover:bg-gray-50 transition"
-            >
-              <FaFacebookF className="text-blue-600" /> Continue with Facebook
-            </button>
-            
-            <div className="relative flex py-2 items-center">
-              <div className="flex-grow border-t border-gray-300"></div>
-              <span className="flex-shrink mx-4 text-gray-500 text-sm font-bold">OR</span>
-              <div className="flex-grow border-t border-gray-300"></div>
-            </div>
-          </div>
-        )}
-
-        {/* Email Form */}
+        {/* Email Form (Now the only option) */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-xs font-extrabold text-black mb-1 uppercase tracking-wide">Email</label>
