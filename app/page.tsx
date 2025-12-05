@@ -31,14 +31,15 @@ export default function Home() {
         {/* Navbar Right Side - CART ICON */}
         <div className="flex gap-4 items-center">
           
-          <div className="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition cursor-pointer">
+         {/* Cart Icon - NOW LINKS TO THE CART PAGE */}
+          <Link href="/cart" className="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition cursor-pointer">
             <FaShoppingCart className="text-xl text-black" />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 bg-red-600 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold">
                 {totalItems}
               </span>
             )}
-          </div>
+          </Link>
           
           {user ? (
             <div className="flex items-center gap-3">
