@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { menuItems, Category, MenuItem } from '@/lib/menuData';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa'; // Added Instagram & Map Icons
+import { FaUserCircle, FaPlus, FaMinus, FaShoppingCart, FaInstagram, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from './context/AuthContext';
 
 export default function Home() {
@@ -49,19 +49,19 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center text-center px-4 bg-coffee-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-50 bg-[url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center" />
+      {/* Hero Section - UPDATED: Made overlay darker (opacity-70) so text is clearer */}
+      <section className="relative h-[80vh] flex items-center justify-center text-center px-4 bg-black overflow-hidden">
+        <div className="absolute inset-0 opacity-70 bg-[url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2574&auto=format&fit=crop')] bg-cover bg-center" />
         
         <div className="relative z-10 space-y-6 max-w-3xl">
-          <span className="text-white tracking-[0.2em] uppercase text-lg font-extrabold bg-black/30 px-4 py-1 rounded">Batu Pahat, Johor</span>
-          <h2 className="text-5xl md:text-8xl font-black text-white leading-tight drop-shadow-lg">
+          <span className="text-black tracking-[0.2em] uppercase text-lg font-extrabold bg-white px-4 py-1 rounded">Batu Pahat, Johor</span>
+          <h2 className="text-5xl md:text-8xl font-black text-white leading-tight drop-shadow-xl">
             TASTE THE <span className="text-coffee-500">LOKAL</span> VIBE.
           </h2>
-          <p className="text-white text-xl font-bold drop-shadow-md max-w-xl mx-auto">
+          <p className="text-white text-2xl font-bold drop-shadow-md max-w-xl mx-auto">
             Serving the best Nasi Lemak Kukus, Premium Frappes, and Western delights in town.
           </p>
-          <a href="#menu" className="inline-block mt-8 px-10 py-4 bg-coffee-500 text-black rounded-full font-black text-lg hover:bg-white hover:text-black transition shadow-xl">
+          <a href="#menu" className="inline-block mt-8 px-10 py-4 bg-coffee-500 text-black rounded-full font-black text-lg hover:bg-white hover:text-black transition shadow-xl border-2 border-transparent hover:border-black">
             ORDER NOW
           </a>
         </div>
@@ -70,8 +70,8 @@ export default function Home() {
       {/* Menu Section */}
       <section id="menu" className="py-20 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h3 className="text-4xl font-black text-black mb-2 uppercase">Our Menu</h3>
-          <p className="text-black font-bold text-lg">Freshly prepared for you</p>
+          <h3 className="text-5xl font-black text-black mb-4 uppercase">Our Menu</h3>
+          <p className="text-black font-extrabold text-xl">Freshly prepared for you</p>
         </div>
 
         {/* Categories Tabs */}
@@ -80,10 +80,10 @@ export default function Home() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat as any)}
-              className={`px-8 py-3 rounded-full border-2 font-bold text-lg transition-all ${
+              className={`px-8 py-3 rounded-full border-2 font-black text-lg transition-all ${
                 activeCategory === cat 
-                ? 'bg-black text-white border-black' 
-                : 'bg-white border-coffee-200 text-black hover:border-coffee-500 hover:bg-coffee-50'
+                ? 'bg-black text-white border-black shadow-lg' 
+                : 'bg-white border-black text-black hover:bg-black hover:text-white'
               }`}
             >
               {cat}
@@ -99,43 +99,40 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white border-t-2 border-coffee-100">
+      <section id="about" className="py-20 bg-white border-t-4 border-black">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-black text-black mb-8 uppercase">About Us</h3>
-          <div className="space-y-6 text-lg font-medium text-gray-800 leading-relaxed">
+          <div className="space-y-6 text-xl font-bold text-black leading-relaxed">
             <p>
-              Welcome to <span className="text-coffee-500 font-bold">Lokal Cafe</span>, the heartbeat of Batu Pahat's food scene.
+              Welcome to <span className="text-coffee-500 font-black">Lokal Cafe</span>, the heartbeat of Batu Pahat's food scene.
             </p>
             <p>
-              We started with a simple mission: to elevate local favorites like <span className="font-bold">Nasi Lemak Kukus</span> with a premium touch, while serving up Western classics that hit the spot. Whether you are craving our signature buttermilk sauce or a refreshing Blue Monster Frappe, everything is crafted with passion.
-            </p>
-            <p>
-              More than just food, Lokal Cafe is a place to gather, relax, and enjoy the vibe. Come for the Nasi Ayam Crunchy, stay for the memories.
+              We started with a simple mission: to elevate local favorites like <span className="underline decoration-coffee-500 decoration-4">Nasi Lemak Kukus</span> with a premium touch.
             </p>
           </div>
         </div>
       </section>
 
       {/* Location / Contact Section */}
-      <section id="location" className="py-20 bg-coffee-900 text-white">
+      <section id="location" className="py-20 bg-black text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-4xl font-black mb-8 uppercase">Find Us</h3>
           
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Address */}
-            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20">
+            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border-2 border-white/20">
               <FaMapMarkerAlt className="text-5xl text-coffee-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold mb-2">Lokal Cafe HQ</h4>
-              <p className="text-gray-300 font-medium">
+              <h4 className="text-2xl font-black mb-2">Lokal Cafe HQ</h4>
+              <p className="text-white font-bold text-lg">
                 Batu Pahat, Johor.<br/>
                 (Near UTHM Parit Raja)
               </p>
             </div>
 
             {/* Social Media */}
-            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border border-white/20">
+            <div className="bg-white/10 p-8 rounded-3xl backdrop-blur-sm border-2 border-white/20">
               <FaInstagram className="text-5xl text-pink-500 mx-auto mb-4" />
-              <h4 className="text-2xl font-bold mb-4">Follow Our Updates</h4>
+              <h4 className="text-2xl font-black mb-4">Follow Our Updates</h4>
               <a 
                 href="https://www.instagram.com/l.o.k.a.l_?igsh=MWFzdXN5czJoZXdlNA==" 
                 target="_blank" 
@@ -150,7 +147,7 @@ export default function Home() {
       </section>
       
       {/* Footer */}
-      <footer className="bg-black text-gray-500 py-8 text-center text-sm font-bold">
+      <footer className="bg-white text-black py-8 text-center text-sm font-black border-t-2 border-black">
         <p>© 2025 Lokal Cafe. All rights reserved.</p>
       </footer>
     </main>
@@ -158,7 +155,7 @@ export default function Home() {
 }
 
 // ------------------------------------------------------------------
-// MENU CARD COMPONENT (With Fixed Colors)
+// MENU CARD COMPONENT (FIXED: PRICE IS NOW BLACK & BIGGER)
 // ------------------------------------------------------------------
 function MenuCard({ item }: { item: MenuItem }) {
   const [quantity, setQuantity] = useState(1);
@@ -171,10 +168,10 @@ function MenuCard({ item }: { item: MenuItem }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-3xl shadow-lg border-2 border-coffee-100 hover:border-coffee-500 transition group flex flex-col h-full">
+    <div className="bg-white p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border-2 border-gray-200 hover:border-black transition group flex flex-col h-full">
       
       {/* Image */}
-      <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border border-gray-100">
+      <div className="relative h-56 w-full mb-5 rounded-2xl overflow-hidden shadow-inner bg-gray-100 border-2 border-gray-100">
         <Image 
           src={item.image} 
           alt={item.name}
@@ -186,32 +183,34 @@ function MenuCard({ item }: { item: MenuItem }) {
       {/* Info - UPDATED COLORS HERE */}
       <div className="flex justify-between items-start mb-3">
         {/* Name: Text-3xl (Big) and Text-Black (Dark) */}
-        <h4 className="text-3xl font-black text-black leading-tight tracking-tight">{item.name}</h4>
-        <span className="text-coffee-600 font-black text-xl whitespace-nowrap ml-2">{item.price}</span>
+        <h4 className="text-2xl font-black text-black leading-tight tracking-tight">{item.name}</h4>
+        
+        {/* PRICE FIX: Made it BIGGER (text-2xl) and SOLID BLACK */}
+        <span className="text-black font-black text-2xl whitespace-nowrap ml-2">{item.price}</span>
       </div>
       
-      {/* Description: Darker Gray */}
-      <p className="text-gray-800 font-bold text-sm mb-6 leading-relaxed flex-grow">
+      {/* Description: Changed from Gray to Black for clarity */}
+      <p className="text-black font-bold text-sm mb-6 leading-relaxed flex-grow opacity-80">
         {item.description}
       </p>
 
       {/* Controls */}
       <div className="mt-auto">
-        <div className="flex items-center justify-between bg-gray-100 rounded-xl p-2 mb-4 border border-gray-300">
+        <div className="flex items-center justify-between bg-gray-100 rounded-xl p-2 mb-4 border-2 border-gray-300">
           <button 
             onClick={decrease}
-            className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-black hover:bg-red-100 hover:text-red-600 transition"
+            className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-black border border-black hover:bg-black hover:text-white transition"
           >
             <FaMinus />
           </button>
           
-          <span className="text-xl font-black text-black w-12 text-center">
+          <span className="text-2xl font-black text-black w-12 text-center">
             {quantity}
           </span>
 
           <button 
             onClick={increase}
-            className="w-10 h-10 flex items-center justify-center bg-black rounded-lg shadow-sm text-white hover:bg-coffee-500 transition"
+            className="w-10 h-10 flex items-center justify-center bg-black rounded-lg shadow-sm text-white border border-black hover:bg-coffee-500 transition"
           >
             <FaPlus />
           </button>
@@ -219,7 +218,7 @@ function MenuCard({ item }: { item: MenuItem }) {
 
         <button 
           onClick={handleAddToCart}
-          className="w-full py-4 bg-coffee-500 text-black border-2 border-transparent rounded-xl font-extrabold text-lg hover:bg-black hover:text-white transition shadow-lg active:scale-95 flex items-center justify-center gap-3"
+          className="w-full py-4 bg-coffee-500 text-black border-2 border-black rounded-xl font-black text-lg hover:bg-black hover:text-white transition shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none active:translate-x-[2px] active:translate-y-[2px] flex items-center justify-center gap-3"
         >
           <FaShoppingCart />
           ADD TO CART
